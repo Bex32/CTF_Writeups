@@ -1,7 +1,7 @@
 the challenge description says we have to guess ? i dont think so :P<br>
 ![My Image](./img/really_random_challenge_desc.png)<br>
 
-#1 anayze the binary and rename variables<br>
+first we anayze the binary and rename variables<br>
 ![My Image](./img/Decomp_randome.png)<br>
 
 we have a win()  named potato :D <br>
