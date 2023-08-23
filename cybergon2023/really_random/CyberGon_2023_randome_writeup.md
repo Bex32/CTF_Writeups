@@ -2,7 +2,7 @@ the challenge description says we have to guess ? i dont think so :P<br>
 ![My Image](./img/really_random_challenge_desc.png)<br>
 
 first we anayze the binary and rename variables<br>
-![My Image](./img/Decomp_randome.png)<br>
+![My Image](./img/Decomp_random.png)<br>
 
 we have a win()  named potato :D <br>
 ![My Image](./img/win.png)<br>
@@ -54,7 +54,7 @@ so we simply set the seed to 0x1337<br>
     payload += b'A'*112                       #fill the 112 bytes of the inputbuffer
     payload += p64(seed)                      #overflow the seed
 ```
-now we generate 10 randome numbers with the `0x1337` seed
+now we generate 10 random numbers with the `0x1337` seed
 
 ```py
 for i in range(10):
