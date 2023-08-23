@@ -46,8 +46,8 @@ the seed is initiated here<br>
 ![My Image](./img/gdb_seed.png)
 
 after our Palyload is read in we can see the the seed is overwritten<br>
-![My Image](./img/payload_overwrite_seed.png)
-so we simply set the seed to 0x00<br>
+![My Image](./img/payload_overwrite_seed.png)<br>
+so we simply set the seed to 0x1337<br>
 
 ```
     payload = b''
