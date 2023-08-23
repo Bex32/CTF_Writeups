@@ -9,7 +9,7 @@ we have a win()  named potato :D <br>
 ![My Image](./img/vars.png)<br>
 
 here we have the overflow vuln the format specifier `%s` does not cap the amount of bytes we can input.<br>
-![My Image](vuln_1.png)<br>
+![My Image](./img/vuln_1.png)<br>
 
 we can overflow the Stack but how can we reach the ret;<br>
 ![My Image](./img/goal_1.png)<br>
